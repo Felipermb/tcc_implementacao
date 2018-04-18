@@ -8,7 +8,7 @@
 # criterion                 :  0 = 'gini' ||  1 = 'entropy'
 # splitter                  :  0 = 'best' ||  1 = 'random'
 # max_depth                 :  0 =  None  || [1 -> 50] (int)
-# min_samples_split         : [1 -> 1000] (int)
+# min_samples_split         : [2 -> 1000] (int)
 # min_samples_leaf          : [1 -> 1000] (int)
 # min_weight_fraction_leaf  : [0 -> 0.5] = (0 -> 5) * 0.1
 # presort                   :  0 = True || 1 = False
@@ -16,6 +16,8 @@
 from StellPlatesDataset import StellPlatesDataset
 from sklearn.tree import DecisionTreeClassifier
 from sklearn import datasets, cross_validation
+from sklearn.model_selection import train_test_split, cross_val_predict
+from sklearn.metrics import accuracy_score
 
 
 class Cromossomo():
@@ -23,11 +25,21 @@ class Cromossomo():
     fitness = 0
     acuracia = 0
     size = 0
+    X_train = 0
+    X_test = 0
+    y_train = 0
+    y_test = 0
 
     # Contrutor, seta o cromossomo individuo e calcula seu fitness
-    def __init__(self, individuo):
+    def __init__(self, individuo, X_train, X_test, y_train, y_test):
         self.individuo = individuo
+        self.X_train = X_train
+        self.X_test = X_test
+        self.y_train = y_train
+        self.y_test = y_test
+
         self.calcularFitness()
+        
 
     # Função para calcular o fitness do cromossomo
     #
@@ -49,14 +61,13 @@ class Cromossomo():
         clf = DecisionTreeClassifier(criterion=cri, splitter=spl, max_depth=max_d, min_samples_split=min_ss,
                                      min_samples_leaf=min_sl, min_weight_fraction_leaf=min_wfleaf, presort=pre)
 
-        # Aplicaremos Cross Validation com fold = 10 para podermos calcular o fitness
-        scores = cross_validation.cross_val_score(
-            clf, stell_plates.data, stell_plates.target, cv=10, scoring='accuracy')
-
-        self.acuracia = round(100*scores.mean())
-
         # Chama a função fit e realiza a montagem da árvore
-        clf = clf.fit(stell_plates.data, stell_plates.target)
+        clf = clf.fit(self.X_train, self.y_train)
+
+        # Calcula a predição para realizar o calculo da acurácia
+        y_predict = clf.predict(self.X_test)
+        self.acuracia = accuracy_score(self.y_test, y_predict)
+        self.acuracia = self.acuracia * 100
 
         # Retorna o tamanho da árvore
         treeObj = clf.tree_
@@ -66,6 +77,7 @@ class Cromossomo():
         # usaremos 1/size para podermos com valor de aumento nos dois parâmetros dsa nossa função de calculo de fitness
         self.fitness = (1/self.size) + self.acuracia
 
+    
     #######################################
     # Váriaveis do cromossomo
 
@@ -90,15 +102,17 @@ class Cromossomo():
             return m
 
     def getMin_samples_split(self):
-        m = self.individuo[4] + self.individuo[5] + self.individuo[6] + self.individuo[7]
+        m = self.individuo[4] + self.individuo[5] + \
+            self.individuo[6] + self.individuo[7]
         return int(m)
 
     def getMin_samples_leaf(self):
-        m = self.individuo[8] + self.individuo[9] + self.individuo[10] + self.individuo[11]
+        m = self.individuo[8] + self.individuo[9] + \
+            self.individuo[10] + self.individuo[11]
         return int(m)
 
     def getMin_weight_fraction_leaf(self):
-        numero = self.individuo[12] 
+        numero = self.individuo[12]
         # Calcula o intervalo de 0 -> 0.5 | tendo seu limite inteiro (0 -> 5) * 0.1
         c = int(numero) * 0.1
         return c
