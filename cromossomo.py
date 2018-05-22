@@ -46,7 +46,7 @@ class Cromossomo():
     # A proposta de otimização é:
     # Obter maior valor de Acurácia e/ou Diminuir o tamanho da árvore final gerada
     def calcularFitness(self):
-        stell_plates = StellPlatesDataset()  # Carrega o dataset a ser usado nos testes
+        dataset = StellPlatesDataset()  # Carrega o dataset a ser usado nos testes
 
         # Carrega o algoritmo de ML que será utilizado (No caso, árvore de decisão = DecisionTreeClassifier() )
         # AQUI, nós passaremos os parâmetros, pois é aqui que usamos o Cromossomo, para poder testa-lo e obter calcular seu fitnes
@@ -59,17 +59,14 @@ class Cromossomo():
         pre = self.getPresort()
 
         clf = DecisionTreeClassifier(criterion=cri, splitter=spl, max_depth=max_d, min_samples_split=min_ss,
-                                     min_samples_leaf=min_sl, min_weight_fraction_leaf=min_wfleaf, presort=pre)
+                                     min_samples_leaf=min_sl, min_weight_fraction_leaf=min_wfleaf, presort=pre, random_state=0)
 
         # Chama a função fit e realiza a montagem da árvore
-        clf = clf.fit(self.X_train, self.y_train)
-
-        # Calcula a predição para realizar o calculo da acurácia
-        y_predict = clf.predict(self.X_test)
-        self.acuracia = accuracy_score(self.y_test, y_predict)
-        self.acuracia = self.acuracia * 100
+        scores = cross_validation.cross_val_score(clf, dataset.data, dataset.target, cv=10)
+        self.acuracia = round(100*scores.mean(), 2)
 
         # Retorna o tamanho da árvore
+        clf = clf.fit(dataset.data, dataset.target)
         treeObj = clf.tree_
         self.size = treeObj.node_count
 

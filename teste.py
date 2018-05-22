@@ -1,50 +1,88 @@
 from StellPlatesDataset import StellPlatesDataset
+
 from sklearn import datasets, tree, cross_validation, metrics
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_score
 
-stell_plates = StellPlatesDataset()
-# iris = datasets.load_iris()
-wine = datasets.load_breast_cancer()
+import random
 
-# clf = DecisionTreeClassifier(min_samples_split=1000)
+# # Instancia a base de dados;
+# dataset = StellPlatesDataset()
 
-# X_train, X_test, y_train, y_test = train_test_split(wine.data, wine.target, test_size=0.3)
+# # Aplicaremos a separação da base, sendo, 30% Teste e 70% Treinamento
+# # para podermos calcular o fitnes
+# # X_train, X_test, y_train, y_test = train_test_split(dataset.data, dataset.target, test_size=0.33, random_state=42)
 
+# # Inicia a árvore de Decisão
+# clf = DecisionTreeClassifier(random_state=0)
 
-# scores = cross_validation.cross_val_score(
-#     clf, wine.data, wine.target, cv=10, scoring='accuracy')
-# # print ("Cross-validated scores: ", scores)
-
+# scores = cross_validation.cross_val_score(clf, dataset.data, dataset.target, cv=10)
 # print ("Accuracy: " + str(round(100*scores.mean(), 2)) + "%")
 
-# clf = clf.fit(wine.data, wine.target)
-
-# # # Calcula a acuracia da fase de teste
-# # print (clf.score(X_test,y_test) * 100)
-# # # Retorna o tamanho da árvore
+# # Retorna o tamanho da árvore
+# clf = clf.fit(dataset.data, dataset.target)
 # treeObj = clf.tree_
 # print (treeObj.node_count,"\n")
 
+novo = ''
+criterion = random.randint(0, 1)
+splitter = random.randint(0, 1)
 
-# X_train, X_test, y_train, y_test = train_test_split(
-#     stell_plates.data, stell_plates.target, test_size=0.3)
+novo += str(criterion)+str(splitter)
 
-# clf2 = DecisionTreeClassifier()
-# clf2 = clf2.fit(X_train, y_train)
+max_depth_bit1 = random.randint(0, 1)
+max_depth_bit2 = random.randint(0, 1)
+max_depth_bit3 = random.randint(0, 1)
+max_depth_bit4 = random.randint(0, 1)
+max_depth_bit5 = random.randint(0, 1)
+max_depth_bit6 = random.randint(0, 1)
 
-# y_predict = clf2.predict(X_test)
-# ac = accuracy_score(y_test, y_predict)
-# print ("Acuracia: ",ac)
-# # Calcula a acuracia da fase de teste
-# print (clf2.score(X_test,y_test) * 100)
+novo += str(max_depth_bit1) + str(max_depth_bit2) + str(max_depth_bit3) + \
+    str(max_depth_bit4) + str(max_depth_bit5) + str(max_depth_bit6)
 
-# treeObj = clf2.tree_
-# print (treeObj.node_count)
-teste = ['1','23','4','5','6','7']
-for ind in teste:
-    print(ind)
-    if(ind == '4'):
-        print("entrou")
-        break
+min_samples_split_bit1 = random.randint(0, 1)
+min_samples_split_bit2 = random.randint(0, 1)
+min_samples_split_bit3 = random.randint(0, 1)
+min_samples_split_bit4 = random.randint(0, 1)
+min_samples_split_bit5 = random.randint(0, 1)
+min_samples_split_bit6 = random.randint(0, 1)
+min_samples_split_bit7 = random.randint(0, 1)
+min_samples_split_bit8 = random.randint(0, 1)
+min_samples_split_bit9 = random.randint(0, 1)
+min_samples_split_bit10 = random.randint(0, 1)
+
+novo += str(min_samples_split_bit1) + str(min_samples_split_bit2) + str(min_samples_split_bit3) + str(min_samples_split_bit4) + str(min_samples_split_bit5) + \
+    str(min_samples_split_bit6) + str(min_samples_split_bit7) + str(min_samples_split_bit8) + \
+    str(min_samples_split_bit9) + str(min_samples_split_bit10)
+
+min_samples_leaf_bit1 = random.randint(0, 1)
+min_samples_leaf_bit2 = random.randint(0, 1)
+min_samples_leaf_bit3 = random.randint(0, 1)
+min_samples_leaf_bit4 = random.randint(0, 1)
+min_samples_leaf_bit5 = random.randint(0, 1)
+min_samples_leaf_bit6 = random.randint(0, 1)
+min_samples_leaf_bit7 = random.randint(0, 1)
+min_samples_leaf_bit8 = random.randint(0, 1)
+min_samples_leaf_bit9 = random.randint(0, 1)
+min_samples_leaf_bit10 = random.randint(0, 1)
+
+novo += str(min_samples_leaf_bit1) + str(min_samples_leaf_bit2) + str(min_samples_leaf_bit3) + str(min_samples_leaf_bit4) + str(min_samples_leaf_bit5) + \
+    str(min_samples_leaf_bit6) + str(min_samples_leaf_bit7) + str(min_samples_leaf_bit8) + \
+    str(min_samples_leaf_bit9) + str(min_samples_leaf_bit10)
+
+min_weight_fraction_leaf_bit1 = random.randint(0, 1)
+min_weight_fraction_leaf_bit2 = random.randint(0, 1)
+min_weight_fraction_leaf_bit3 = random.randint(0, 1)
+
+novo += str(min_weight_fraction_leaf_bit1) + \
+    str(min_weight_fraction_leaf_bit2) + str(min_weight_fraction_leaf_bit3)
+
+presort = random.randint(0, 1)
+
+novo += str(presort)
+
+print(len(novo))
+
+for i in range(32):
+    print(i)
